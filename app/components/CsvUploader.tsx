@@ -10,14 +10,18 @@ const TEMPLATES = [
   { id: "template4", name: "AI Certificate", file: "/template4.png" },
   { id: "template5", name: "FS Certificate", file: "/template5.png" },
 ];
-
+interface ProcessingResult {
+  success: boolean;
+  email?: string;
+  error?: string;
+}
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [selectedTemplates, setSelectedTemplates] = useState<
     Record<string, boolean>
   >(TEMPLATES.reduce((acc, t) => ({ ...acc, [t.id]: true }), {}));
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<ProcessingResult[]>([]);
   const [driveFolderUrl, setDriveFolderUrl] = useState<string>(""); // New state for Drive folder URL
 
   const handleTemplateToggle = (templateId: string) => {
