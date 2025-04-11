@@ -113,6 +113,7 @@ async function processUser(user: ProcessRequest, selectedTemplates: string[]) {
   // Create a single user folder
   const userFolderName = `${user.fullName} Certificates`.replace(/[^\w\s-]/gi, '');
   const userFolderId = await createUserFolder(baseFolderId, userFolderName);
+  const userFolderUrl = `https://drive.google.com/drive/folders/${userFolderId}`; // 👈 Add this line
 
   for (const template of templates) {
     // Generate serial number
@@ -168,7 +169,7 @@ async function processUser(user: ProcessRequest, selectedTemplates: string[]) {
       color: rgb(0, 0, 0),
     });
     
-    const qrCodeDataUrl = await QRCode.toDataURL(user.url);
+    const qrCodeDataUrl = await QRCode.toDataURL(userFolderUrl);
     const qrImage = await pdfDoc.embedPng(qrCodeDataUrl);
     const qrSize = 80;
     
@@ -204,8 +205,6 @@ async function processUser(user: ProcessRequest, selectedTemplates: string[]) {
       requestBody: { role: 'reader', type: 'anyone' },
     });
 
-    // Update database with folder URL
-    const folderUrl = `https://drive.google.com/drive/folders/${userFolderId}`;
     
     await prisma.serialCounter.update({
       where: { prefix: template.prefix },
@@ -218,8 +217,7 @@ async function processUser(user: ProcessRequest, selectedTemplates: string[]) {
         email: user.email,
         serialNumber,
         templateName: template.file,
-        url: folderUrl,
-      },
+        url: userFolderUrl,      },
     });
 
     zip.file(pdfFileName, pdfBytes);
