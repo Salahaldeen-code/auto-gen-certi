@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 
 const TEMPLATES = [
   { id: "template1", name: "PMPP Certificate", file: "/template1.png" },
@@ -10,18 +9,14 @@ const TEMPLATES = [
   { id: "template4", name: "AI Certificate", file: "/template4.png" },
   { id: "template5", name: "FS Certificate", file: "/template5.png" },
 ];
-interface ProcessingResult {
-  success: boolean;
-  email?: string;
-  error?: string;
-}
+
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [selectedTemplates, setSelectedTemplates] = useState<
     Record<string, boolean>
   >(TEMPLATES.reduce((acc, t) => ({ ...acc, [t.id]: true }), {}));
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<ProcessingResult[]>([]);
+  const [results, setResults] = useState<any[]>([]);
   const [driveFolderUrl, setDriveFolderUrl] = useState<string>(""); // New state for Drive folder URL
 
   const handleTemplateToggle = (templateId: string) => {
@@ -92,7 +87,7 @@ export default function Home() {
                   onClick={() => handleTemplateToggle(template.id)}
                 >
                   <div className="aspect-w-1 aspect-h-1">
-                    <Image
+                    <img
                       src={template.file}
                       alt={template.name}
                       className="object-contain w-full h-full"
