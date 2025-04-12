@@ -2,15 +2,16 @@
   "name": "certificate_generator",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
+"scripts": {
+  "dev": "next dev --turbopack",
+  "build": "prisma generate && next build",
+  "start": "next start",
+  "lint": "next lint"
+},
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "axios": "^1.8.4",
+    "dotenv": "^16.5.0",
     "googleapis": "^148.0.0",
     "jszip": "^3.10.1",
     "next": "15.2.3",
