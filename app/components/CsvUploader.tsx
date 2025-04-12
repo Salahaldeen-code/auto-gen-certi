@@ -9,6 +9,19 @@ const TEMPLATES = [
   { id: "template4", name: "AI Certificate", file: "/template4.png" },
   { id: "template5", name: "FS Certificate", file: "/template5.png" },
 ];
+type SuccessResult = {
+  name: string;
+  email: string;
+  score: number;
+};
+
+type ErrorResult = {
+  success: false;
+  error: string;
+  email?: string;
+};
+
+type Result = SuccessResult | ErrorResult;
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
@@ -16,7 +29,8 @@ export default function Home() {
     Record<string, boolean>
   >(TEMPLATES.reduce((acc, t) => ({ ...acc, [t.id]: true }), {}));
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+
+  const [results, setResults] = useState<Result[]>([]);
   const [driveFolderUrl, setDriveFolderUrl] = useState<string>(""); // New state for Drive folder URL
 
   const handleTemplateToggle = (templateId: string) => {
@@ -56,7 +70,7 @@ export default function Home() {
       setResults(response.data.details);
     } catch (error) {
       console.error("Upload failed:", error);
-      setResults([{ success: false, error: "Upload failed" }]);
+      setResults([{ success: false, error: "Upload failed", email: "N/A" }]);
     } finally {
       setLoading(false);
     }
@@ -183,12 +197,14 @@ export default function Home() {
                 <div
                   key={index}
                   className={`p-3 rounded-md ${
-                    result.success
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
+                    "success" in result && !result.success
+                      ? "bg-red-100 text-red-800"
+                      : "bg-green-100 text-green-800"
                   }`}
                 >
-                  {result.email} - {result.success ? "Success" : result.error}
+                  {"success" in result
+                    ? `${result.email ?? "Unknown"} - ${result.error}`
+                    : `${result.email || "Unknown"} - Success`}
                 </div>
               ))}
             </div>
