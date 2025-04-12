@@ -21,12 +21,17 @@ const transporter = nodemailer.createTransport({
 
 const prisma = new PrismaClient();
 
-// Google Drive Configuration omer
-const CLIENT_ID = '266878449981-uu7l6uq9ptbg9i4n8al56q70qqcdv4sl.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
-const REDIRECT_URL = 'https://developers.google.com/oauthplayground';
-const REFRESH_TOKEN = '1//04DkVGHciQiLWCgYIARAAGAQSNwF-L9IrNI1_wJteNVHz2r-2Q6ar3xcBc3ygYDQWjHtgd6GIkR4sfrkXrgqGCWElvK9Ss_9qrCg';
+// // Google Drive Configuration omer
+// const CLIENT_ID = '266878449981-uu7l6uq9ptbg9i4n8al56q70qqcdv4sl.apps.googleusercontent.com';
+// const CLIENT_SECRET = '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';
+// const REDIRECT_URL = 'https://developers.google.com/oauthplayground';
+// const REFRESH_TOKEN = '1//04DkVGHciQiLWCgYIARAAGAQSNwF-L9IrNI1_wJteNVHz2r-2Q6ar3xcBc3ygYDQWjHtgd6GIkR4sfrkXrgqGCWElvK9Ss_9qrCg';
 
+
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
+const REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
 
 const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
 oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
